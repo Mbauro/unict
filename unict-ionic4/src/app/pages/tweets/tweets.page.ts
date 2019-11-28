@@ -32,6 +32,14 @@ export class TweetsPage implements OnInit {
 
     // Quando carico la pagina, riempio il mio array di Tweets
     await this.getTweets();
+    //Populate the hashtag list for each tweet
+    for(let i = 0; i <  this.tweets.length; i++){
+      this.tweets[i].hashtags = (this.tweets[i].tweet.split(' ').filter(v=> v.startsWith('#')));
+      console.log(this.tweets[i].hashtags);
+    }
+    
+    
+ 
 
   }
 
@@ -59,6 +67,8 @@ export class TweetsPage implements OnInit {
     }
 
   }
+   /*Handle hashtags */
+   private hashtagsList:string[];
 
   async createOrEditTweet(tweet?: Tweet) {
 
@@ -66,6 +76,7 @@ export class TweetsPage implements OnInit {
         Creo una modal (assegnandola ad una variabile)
         per permettere all'utente di scrivere un nuovo tweet
     */
+  
     
     const modal = await this.modalCtrl.create({
       component: NewTweetPage,
@@ -198,5 +209,29 @@ export class TweetsPage implements OnInit {
       
     }
   }
+
+ 
+
+  populateHashtagList(tweet:Tweet){
+    this.hashtagsList = (tweet.tweet.split(' ').filter(v=> v.startsWith('#')));
+    for(let i = 0; i< this.hashtagsList.length; i++){
+      console.log(this.hashtagsList[i]);
+    }
+  }
+  getItems(ev: any) {
+    // set val to the value of the searchbar
+    const val = ev.target.value;
+
+    // if the value is an empty string don't filter the items
+    if (val) {
+      for(let i = 0; i <  this.tweets.length; i++){
+        console.log("HASTAGS: "+this.tweets[i].hashtags);
+        if(this.tweets[i].hashtags.includes(val)){
+          return this.tweets[i];
+        }
+      }
+    } //else this.getTweets();
+  }
+
 
 }
